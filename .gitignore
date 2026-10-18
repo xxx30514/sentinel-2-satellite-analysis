@@ -1,0 +1,31 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environment
+.venv/
+venv/
+
+# Pytest and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Large satellite imagery
+data/real_satellite/
+
+# Generated analysis outputs
+outputs/
+
+# Local temporary files
+*.log
