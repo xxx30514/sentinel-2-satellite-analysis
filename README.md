@@ -333,4 +333,14 @@ NDVI 一般介於 -1 至 1。較高的正值常見於較茂盛的植被，但實
 
 ## 十、成果展示
 ![專案截圖](docs/images/info.png)
+![專案截圖](docs/images/info2.png)
+![專案截圖](docs/images/ndvi.png)
+![專案截圖](docs/images/info.png)
+![專案截圖](docs/images/QGIS.png)
+![專案截圖](docs/images/T50RRN_rgb.png)
+
+
+
+
+
 
