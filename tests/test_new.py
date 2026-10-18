@@ -9,11 +9,12 @@ from rasterio.transform import from_origin
 from new import inspect_image, print_report
 
 
-DATA_DIR = Path(__file__).parent / "data"
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = PROJECT_ROOT / "data"
 
 
 def test_normal_image():
-    """測試一般影像的波段品質檢查。"""
+    """測試一般影像的波段品質檢查與test_main的差異在於檢測與產生回應的方法解藕。"""
 
     image_path = DATA_DIR / "sample_multi_band.tif"
 

@@ -7,7 +7,7 @@ import numpy as np
 MIN_VALID_RATIO = 90.0
 
 def inspect_image(image_path: Path) -> None:
-    """讀取 GeoTIFF 基本資訊，並檢查各個波段的資料品質。"""
+    """讀取 GeoTIFF 基本資訊，並檢查各個波段的資料品質。分析與輸出混在一起"""
 
     if not image_path.is_file():
         print(f"錯誤：找不到影像檔案：{image_path}")
@@ -111,6 +111,7 @@ def main() -> None:
         description="Satellite Image Checker"
     )
     parser.add_argument(
+        ##位置參數 不可省略
         "image",
         type=Path,
         help="要檢查的 GeoTIFF 影像路徑",

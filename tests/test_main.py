@@ -5,7 +5,8 @@ from main import inspect_image
 
 
 # 取得專案中的測試影像路徑
-DATA_DIR = Path(__file__).parent / "data"
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = PROJECT_ROOT / "data"
 
 
 def test_normal_image(capsys):

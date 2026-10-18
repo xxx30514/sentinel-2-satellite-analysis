@@ -1,11 +1,17 @@
 
+import argparse
 from pathlib import Path
 
 import rasterio
 
 
-PROJECT_DIR = Path(__file__).parent
-VRT_PATH = PROJECT_DIR / "data" / "real_satellite" / "T50RRN_rgb.vrt"
+PROJECT_DIR = Path(__file__).resolve().parent
+DEFAULT_VRT_PATH = (
+    PROJECT_DIR
+    / "data"
+    / "real_satellite"
+    / "T50RRN_rgb.vrt"
+)
 
 
 def inspect_vrt(vrt_path: Path) -> dict:
@@ -23,9 +29,12 @@ def inspect_vrt(vrt_path: Path) -> dict:
             "band_count_is_3": src.count == 3,
             "crs_exists": src.crs is not None,
             "resolution_is_10m": all(
-                abs(value - 10) < 0.01 for value in src.res
+                abs(value - 10) < 0.01
+                for value in src.res
             ),
-            "dimensions_are_valid": src.width > 0 and src.height > 0,
+            "dimensions_are_valid": (
+                src.width > 0 and src.height > 0
+            ),
             "sample_readable": sample.size > 0,
         }
 
@@ -43,18 +52,42 @@ def inspect_vrt(vrt_path: Path) -> dict:
         }
 
 
+def parse_args():
+    """解析命令列參數。"""
+
+    parser = argparse.ArgumentParser(
+        description="檢查 Sentinel-2 三波段 VRT 的基本資訊與可讀取性。"
+    )
+
+    parser.add_argument(
+        "--vrt",
+        type=Path,
+        default=DEFAULT_VRT_PATH,
+        help=(
+            "指定要檢查的 VRT 檔案路徑。"
+            "預設為 data/real_satellite/T50RRN_rgb.vrt"
+        ),
+    )
+
+    return parser.parse_args()
+
+
 def main():
-    if not VRT_PATH.is_file():
-        print(f"找不到 VRT：{VRT_PATH}")
-        print("請確認 VRT 實際儲存位置，並修改 VRT_PATH。")
-        return
+    args = parse_args()
+    vrt_path = args.vrt
+
+    if not vrt_path.is_file():
+        print(f"找不到 VRT：{vrt_path}")
+        return 1
 
     try:
-        result = inspect_vrt(VRT_PATH)
+        result = inspect_vrt(vrt_path)
 
         print("=== Sentinel-2 VRT 檢查報告 ===")
         print(f"檔案：{result['path']}")
-        print(f"影像尺寸：{result['width']} x {result['height']}")
+        print(
+            f"影像尺寸：{result['width']} x {result['height']}"
+        )
         print(f"波段數：{result['band_count']}")
         print(f"資料型別：{result['dtypes']}")
         print(f"CRS：{result['crs']}")
@@ -71,9 +104,12 @@ def main():
             "PASS" if result["passed"] else "FAIL",
         )
 
+        return 0 if result["passed"] else 1
+
     except Exception as exc:
         print(f"VRT 檢查失敗：{exc}")
+        return 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

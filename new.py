@@ -9,7 +9,7 @@ MIN_VALID_RATIO = 90.0
 
 
 def inspect_image(image_path: Path) -> dict:
-    """分析 GeoTIFF 影像，回傳結構化的檢查結果。"""
+    """分析 GeoTIFF 影像，回傳結構化的檢查結果。分析與輸出分離"""
 
     image_path = Path(image_path)
 
@@ -159,6 +159,7 @@ def main() -> None:
     )
 
     parser.add_argument(
+        #位置參數 不可省略
         "image_path",
         type=Path,
         help="要檢查的 GeoTIFF 影像路徑",
