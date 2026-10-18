@@ -332,14 +332,25 @@ NDVI 一般介於 -1 至 1。較高的正值常見於較茂盛的植被，但實
 本專案旨在建立一套可重現的衛星影像分析流程，展示 Python 在遙測資料處理、Raster 品質統計、植生指數計算、地理空間資料輸出及自動化測試上的實務應用。
 
 ## 十、成果展示
-![專案截圖](docs/images/info.png)
-![專案截圖](docs/images/info2.png)
-![專案截圖](docs/images/ndvi.png)
-![專案截圖](docs/images/info.png)
+
+1. Sentinel-2 真彩色影像
+
+使用 Sentinel-2 B02、B03、B04 波段建立 RGB 真彩色影像，並透過 QGIS 檢視影像內容。
 ![專案截圖](docs/images/QGIS.png)
 ![專案截圖](docs/images/T50RRN_rgb.png)
 
+2. NDVI 植生指數
 
+使用 B04（Red）與 B08（NIR）波段計算 NDVI，輸出 GeoTIFF，並於 QGIS 中進行視覺化。
+![專案截圖](docs/images/ndvi.png)
+![專案截圖](docs/images/info.png)
+
+3. 影像空間資訊
+
+透過 QGIS 檢視影像的座標參考系統、空間解析度及影像尺寸，確認輸出資料的基本空間資訊。
+
+![專案截圖](docs/images/info.png)
+![專案截圖](docs/images/info2.png)
 
 
 
