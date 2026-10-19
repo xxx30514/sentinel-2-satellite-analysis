@@ -3,6 +3,7 @@ import argparse
 
 import numpy as np
 import rasterio
+from ndvi_utils import calculate_ndvi_array
 from rasterio.windows import Window
 
 
@@ -192,112 +193,7 @@ def validate_rasters(
 # 5. 將 NDVI 計算獨立封裝
 # ==================================================
 
-def calculate_ndvi_array(
-    red: np.ndarray,
-    nir: np.ndarray,
-    red_mask: np.ndarray | None = None,
-    nir_mask: np.ndarray | None = None,
-    nodata: float = OUTPUT_NODATA,
-) -> tuple[np.ndarray, np.ndarray]:
-    """
-    計算 NDVI。
-
-    Parameters
-    ----------
-    red:
-        紅光波段 B04。
-    nir:
-        近紅外線波段 B08。
-    red_mask:
-        紅光波段的有效像素遮罩。
-    nir_mask:
-        近紅外線波段的有效像素遮罩。
-    nodata:
-        無效 NDVI 像素的輸出值。
-
-    Returns
-    -------
-    tuple[np.ndarray, np.ndarray]
-        NDVI float32 陣列與布林有效像素遮罩。
-    """
-
-    # 驗證輸入陣列
-    if red.shape != nir.shape:
-        raise ValueError(
-            "B04 與 B08 的陣列形狀不同。"
-        )
-
-    if red_mask is None:
-        red_mask = np.ones(
-            red.shape,
-            dtype=bool,
-        )
-
-    if nir_mask is None:
-        nir_mask = np.ones(
-            nir.shape,
-            dtype=bool,
-        )
-
-    if red_mask.shape != red.shape:
-        raise ValueError(
-            "red_mask 的形狀與紅光陣列不同。"
-        )
-
-    if nir_mask.shape != nir.shape:
-        raise ValueError(
-            "nir_mask 的形狀與近紅外線陣列不同。"
-        )
-
-    # 統一轉換為 float32
-    red = red.astype(
-        np.float32,
-        copy=False,
-    )
-
-    nir = nir.astype(
-        np.float32,
-        copy=False,
-    )
-
-    denominator = nir + red
-
-    # 判斷哪些像素可以參與計算
-    valid_mask = (
-        red_mask.astype(bool)
-        & nir_mask.astype(bool)
-        & np.isfinite(red)
-        & np.isfinite(nir)
-        & np.isfinite(denominator)
-        & (denominator != 0)
-    )
-
-    # 預設全部填入 NoData
-    ndvi = np.full(
-        red.shape,
-        nodata,
-        dtype=np.float32,
-    )
-
-    # 只計算有效像素
-    with np.errstate(
-        divide="ignore",
-        invalid="ignore",
-        over="ignore",
-    ):
-        np.divide(
-            nir - red,
-            denominator,
-            out=ndvi,
-            where=valid_mask,
-        )
-
-    # 排除計算後仍出現 NaN 或無限大的結果
-    valid_mask &= np.isfinite(ndvi)
-
-    ndvi[~valid_mask] = nodata
-
-    return ndvi, valid_mask
+#已將計算NDVI方法封裝至ndvi_utils.py
 
 
 # ==================================================
